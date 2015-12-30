@@ -55,9 +55,10 @@ func (db *DB) DeviceCreate(groupId string, device *Device) (err error) {
 		device.ID = uid.New()
 	}
 	device.GroupID = groupId
-	coll := db.session.Copy().DB(db.name).C(CollectionDevices)
+	session := db.session.Copy()
+	coll := session.DB(db.name).C(CollectionDevices)
 	err = coll.Insert(device)
-	coll.Database.Session.Close()
+	session.Close()
 	return
 }
 
