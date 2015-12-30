@@ -73,6 +73,16 @@ func (db *DB) PlaceGet(groupId, id string) (place *Place, err error) {
 	return
 }
 
+// PlaceList возвращает список всех мест, определенных в хранилище для данной группы пользователей.
+func (db *DB) PlaceList(groupID string) (places []*Place, err error) {
+	session := db.session.Copy()
+	coll := session.DB(db.name).C(CollectionPlaces)
+	places = make([]*Place, 0)
+	err = coll.Find(bson.M{"groupId": groupID}).Select(bson.M{"groupId": 0, "geo": 0}).All(&places)
+	session.Close()
+	return
+}
+
 // PlaceCreate добавляет в хранилище описание нового места для группы. Указание группы позволяет
 // дополнительно защитить от ошибок переназначения места для другой группы.
 func (db *DB) PlaceCreate(groupId string, place *Place) (err error) {
@@ -110,16 +120,6 @@ func (db *DB) PlaceDelete(groupId, id string) (err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionPlaces)
 	err = coll.Remove(bson.M{"_id": id, "groupId": groupId})
-	session.Close()
-	return
-}
-
-// PlaceList возвращает список всех мест, определенных в хранилище для данной группы пользователей.
-func (db *DB) PlaceList(groupID string) (places []*Place, err error) {
-	session := db.session.Copy()
-	coll := session.DB(db.name).C(CollectionPlaces)
-	places = make([]*Place, 0)
-	err = coll.Find(bson.M{"groupId": groupID}).Select(bson.M{"groupId": 0, "geo": 0}).All(&places)
 	session.Close()
 	return
 }

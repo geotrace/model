@@ -75,6 +75,28 @@ func (db *DB) EventGet(groupId, deviceId, id string) (event *Event, err error) {
 	return
 }
 
+// EventList возвращает список всех событий, зарегистрированных для указанного устройства.
+func (db *DB) EventList(groupID, deviceId string) (events []*Event, err error) {
+	session := db.session.Copy()
+	coll := session.DB(db.name).C(CollectionEvents)
+	events = make([]*Event, 0)
+	err = coll.Find(bson.M{"groupId": groupID, "deviceId": deviceId}).
+		Select(bson.M{"groupId": 0, "deviceId": 0}).All(&events)
+	session.Close()
+	return
+}
+
+// EventDevices возвращает список идентификаторов устройств, данные о которых есть в коллекции
+// событий для данной группы пользователей.
+func (db *DB) EventDevices(groupID string) (deviceIds []string, err error) {
+	session := db.session.Copy()
+	coll := session.DB(db.name).C(CollectionEvents)
+	deviceIds = make([]string, 0)
+	err = coll.Find(bson.M{"groupId": groupID}).Distinct("deviceID", &deviceIds)
+	session.Close()
+	return
+}
+
 // EventCreate добавляет в хранилище описание новых событий с привязкой к устройству.
 func (db *DB) EventCreate(groupId, deviceId string, events ...*Event) (err error) {
 	objs := make([]interface{}, len(events))
@@ -109,28 +131,6 @@ func (db *DB) EventDelete(groupId, deviceId, id string) (err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionEvents)
 	err = coll.Remove(bson.M{"_id": id, "groupId": groupId, "deviceId": deviceId})
-	session.Close()
-	return
-}
-
-// EventList возвращает список всех событий, зарегистрированных для указанного устройства.
-func (db *DB) EventList(groupID, deviceId string) (events []*Event, err error) {
-	session := db.session.Copy()
-	coll := session.DB(db.name).C(CollectionEvents)
-	events = make([]*Event, 0)
-	err = coll.Find(bson.M{"groupId": groupID, "deviceId": deviceId}).
-		Select(bson.M{"groupId": 0, "deviceId": 0}).All(&events)
-	session.Close()
-	return
-}
-
-// EventDevices возвращает список идентификаторов устройств, данные о которых есть в коллекции
-// событий для данной группы пользователей.
-func (db *DB) EventDevices(groupID string) (deviceIds []string, err error) {
-	session := db.session.Copy()
-	coll := session.DB(db.name).C(CollectionEvents)
-	deviceIds = make([]string, 0)
-	err = coll.Find(bson.M{"groupId": groupID}).Distinct("deviceID", &deviceIds)
 	session.Close()
 	return
 }

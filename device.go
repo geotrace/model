@@ -49,6 +49,18 @@ func (db *DB) DeviceGet(groupId, id string) (device *Device, err error) {
 	return
 }
 
+// DeviceList возвращает список всех устройств, которые зарегистрированы для данной группы
+// пользователей.
+func (db *DB) DeviceList(groupID string) (devices []*Device, err error) {
+	session := db.session.Copy()
+	coll := session.DB(db.name).C(CollectionDevices)
+	devices = make([]*Device, 0)
+	err = coll.Find(bson.M{"groupId": groupID}).
+		Select(bson.M{"groupId": 0, "password": 0}).All(&devices)
+	session.Close()
+	return
+}
+
 // DeviceCreate создает описание нового устройства, одновременно привязывая его к указанной группе.
 func (db *DB) DeviceCreate(groupId string, device *Device) (err error) {
 	if device.ID == "" {
@@ -77,18 +89,6 @@ func (db *DB) DeviceDelete(groupId, id string) (err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionDevices)
 	err = coll.Remove(bson.M{"_id": id, "groupId": groupId})
-	session.Close()
-	return
-}
-
-// DeviceList возвращает список всех устройств, которые зарегистрированы для данной группы
-// пользователей.
-func (db *DB) DeviceList(groupID string) (devices []*Device, err error) {
-	session := db.session.Copy()
-	coll := session.DB(db.name).C(CollectionDevices)
-	devices = make([]*Device, 0)
-	err = coll.Find(bson.M{"groupId": groupID}).
-		Select(bson.M{"groupId": 0, "password": 0}).All(&devices)
 	session.Close()
 	return
 }

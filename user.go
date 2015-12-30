@@ -31,6 +31,16 @@ type User struct {
 	Password Password `bson:"password" json:"-"`
 }
 
+// UserList возвращает список всех пользователей, зарегистрированных в указанной группе.
+func (db *DB) UserList(groupID string) (users []User, err error) {
+	session := db.session.Copy()
+	coll := session.DB(db.name).C(CollectionUsers)
+	users = make([]User, 0)
+	err = coll.Find(bson.M{"groupId": groupID}).Select(bson.M{"password": 0, "groupId": 0}).All(&users)
+	session.Close()
+	return
+}
+
 // UserCreate создает нового пользователя по его описанию. Поле Login должно быть уникальным,
 // в противном случае возвращается ошибка.
 func (db *DB) UserCreate(user *User) (err error) {
@@ -58,16 +68,6 @@ func (db *DB) UserDelete(login string) (err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionUsers)
 	err = coll.RemoveId(login)
-	session.Close()
-	return
-}
-
-// UserList возвращает список всех пользователей, зарегистрированных в указанной группе.
-func (db *DB) UserList(groupID string) (users []User, err error) {
-	session := db.session.Copy()
-	coll := session.DB(db.name).C(CollectionUsers)
-	users = make([]User, 0)
-	err = coll.Find(bson.M{"groupId": groupID}).Select(bson.M{"password": 0, "groupId": 0}).All(&users)
 	session.Close()
 	return
 }
