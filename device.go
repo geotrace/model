@@ -24,7 +24,7 @@ type Device struct {
 	// идентификатор типа устройства
 	Type string `bson:"type,omitempty" json:"type,omitempty"`
 	// хеш пароля для авторизации
-	Password Password `bson:"password" json:"-"`
+	Password Password `bson:"password,omitempty" json:"-"`
 }
 
 // String возвращает строку с отображаемым именем устройства. Если для данного устройства
@@ -86,7 +86,8 @@ func (db *DB) DeviceList(groupID string) (devices []*Device, err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionDevices)
 	devices = make([]*Device, 0)
-	err = coll.Find(bson.M{"groupId": groupID}).Select(bson.M{"groupId": 0}).All(&devices)
+	err = coll.Find(bson.M{"groupId": groupID}).
+		Select(bson.M{"groupId": 0, "password": 0}).All(&devices)
 	session.Close()
 	return
 }
