@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/mdigger/uid2"
+	"github.com/geotrace/uid"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -64,11 +64,7 @@ func (db *DB) DeviceList(groupID string) (devices []*Device, err error) {
 // DeviceCreate создает описание нового устройства, одновременно привязывая его к указанной группе.
 func (db *DB) DeviceCreate(groupId string, device *Device) (err error) {
 	if device.ID == "" {
-		id, err := uid.ID64()
-		if err != nil {
-			return err
-		}
-		device.ID = id
+		device.ID = uid.New()
 	}
 	device.GroupID = groupId
 	session := db.session.Copy()
