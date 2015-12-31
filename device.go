@@ -37,9 +37,9 @@ func (d *Device) String() string {
 	return d.ID
 }
 
-// DeviceGet возвращает информацию о устройстве с указанным идентификатором, которое привязано
+// Get возвращает информацию о устройстве с указанным идентификатором, которое привязано
 // к указанной группе.
-func (db *DB) DeviceGet(groupId, id string) (device *Device, err error) {
+func (db *DBDevices) Get(groupId, id string) (device *Device, err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionDevices)
 	device = new(Device)
@@ -49,9 +49,9 @@ func (db *DB) DeviceGet(groupId, id string) (device *Device, err error) {
 	return
 }
 
-// DeviceList возвращает список всех устройств, которые зарегистрированы для данной группы
+// List возвращает список всех устройств, которые зарегистрированы для данной группы
 // пользователей.
-func (db *DB) DeviceList(groupID string) (devices []*Device, err error) {
+func (db *DBDevices) List(groupID string) (devices []*Device, err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionDevices)
 	devices = make([]*Device, 0)
@@ -61,8 +61,8 @@ func (db *DB) DeviceList(groupID string) (devices []*Device, err error) {
 	return
 }
 
-// DeviceCreate создает описание нового устройства, одновременно привязывая его к указанной группе.
-func (db *DB) DeviceCreate(groupId string, device *Device) (err error) {
+// Create создает описание нового устройства, одновременно привязывая его к указанной группе.
+func (db *DBDevices) Create(groupId string, device *Device) (err error) {
 	if device.ID == "" {
 		device.ID = uid.New()
 	}
@@ -74,8 +74,8 @@ func (db *DB) DeviceCreate(groupId string, device *Device) (err error) {
 	return
 }
 
-// DeviceUpdate обновляет описание устройства и привязывает его к указанной группе.
-func (db *DB) DeviceUpdate(groupId string, device *Device) (err error) {
+// Update обновляет описание устройства и привязывает его к указанной группе.
+func (db *DBDevices) Update(groupId string, device *Device) (err error) {
 	device.GroupID = groupId
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionDevices)
@@ -84,8 +84,8 @@ func (db *DB) DeviceUpdate(groupId string, device *Device) (err error) {
 	return
 }
 
-// DeviceDelete удаляет описание устройства.
-func (db *DB) DeviceDelete(groupId, id string) (err error) {
+// Delete удаляет описание устройства.
+func (db *DBDevices) Delete(groupId, id string) (err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionDevices)
 	err = coll.Remove(bson.M{"_id": id, "groupId": groupId})

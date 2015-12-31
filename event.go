@@ -63,9 +63,9 @@ type Event struct {
 	Power uint8 `bson:"power,omitempty" json:"power,omitempty"`
 }
 
-// EventGet возвращает описание события с указанным идентификатором для конкретного устройства
+// Get возвращает описание события с указанным идентификатором для конкретного устройства
 // из хранилища.
-func (db *DB) EventGet(groupId, deviceId, id string) (event *Event, err error) {
+func (db *DBEvents) Get(groupId, deviceId, id string) (event *Event, err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionEvents)
 	event = new(Event)
@@ -75,8 +75,8 @@ func (db *DB) EventGet(groupId, deviceId, id string) (event *Event, err error) {
 	return
 }
 
-// EventList возвращает список всех событий, зарегистрированных для указанного устройства.
-func (db *DB) EventList(groupID, deviceId string) (events []*Event, err error) {
+// List возвращает список всех событий, зарегистрированных для указанного устройства.
+func (db *DBEvents) List(groupID, deviceId string) (events []*Event, err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionEvents)
 	events = make([]*Event, 0)
@@ -86,9 +86,9 @@ func (db *DB) EventList(groupID, deviceId string) (events []*Event, err error) {
 	return
 }
 
-// EventDevices возвращает список идентификаторов устройств, данные о которых есть в коллекции
+// Devices возвращает список идентификаторов устройств, данные о которых есть в коллекции
 // событий для данной группы пользователей.
-func (db *DB) EventDevices(groupID string) (deviceIds []string, err error) {
+func (db *DBEvents) Devices(groupID string) (deviceIds []string, err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionEvents)
 	deviceIds = make([]string, 0)
@@ -97,8 +97,8 @@ func (db *DB) EventDevices(groupID string) (deviceIds []string, err error) {
 	return
 }
 
-// EventCreate добавляет в хранилище описание новых событий с привязкой к устройству.
-func (db *DB) EventCreate(groupId, deviceId string, events ...*Event) (err error) {
+// Create добавляет в хранилище описание новых событий с привязкой к устройству.
+func (db *DBEvents) Create(groupId, deviceId string, events ...*Event) (err error) {
 	objs := make([]interface{}, len(events))
 	for i, event := range events {
 		if !event.ID.Valid() {
@@ -115,8 +115,8 @@ func (db *DB) EventCreate(groupId, deviceId string, events ...*Event) (err error
 	return
 }
 
-// EventUpdate обновляет описание события в хранилище.
-func (db *DB) EventUpdate(groupId, deviceId string, event *Event) (err error) {
+// Update обновляет описание события в хранилище.
+func (db *DBEvents) Update(groupId, deviceId string, event *Event) (err error) {
 	event.GroupID = groupId
 	event.DeviceID = deviceId
 	session := db.session.Copy()
@@ -126,8 +126,8 @@ func (db *DB) EventUpdate(groupId, deviceId string, event *Event) (err error) {
 	return
 }
 
-// EventDelete удаляет описание события из хранилища.
-func (db *DB) EventDelete(groupId, deviceId, id string) (err error) {
+// Delete удаляет описание события из хранилища.
+func (db *DBEvents) Delete(groupId, deviceId, id string) (err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionEvents)
 	err = coll.Remove(bson.M{"_id": id, "groupId": groupId, "deviceId": deviceId})

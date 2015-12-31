@@ -61,10 +61,10 @@ func (p *Place) prepare() (err error) {
 	return
 }
 
-// PlaceGet возвращает описание места по его идентификатору. Кроме идентификатора места, который
+// Get возвращает описание места по его идентификатору. Кроме идентификатора места, который
 // является уникальным, необходимо так же указывать идентификатор группы — это позволяет
 // дополнительно ограничить даже случайный доступ пользователей к чужой информации.
-func (db *DB) PlaceGet(groupId, id string) (place *Place, err error) {
+func (db *DBPlaces) Get(groupId, id string) (place *Place, err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionPlaces)
 	place = new(Place)
@@ -73,8 +73,8 @@ func (db *DB) PlaceGet(groupId, id string) (place *Place, err error) {
 	return
 }
 
-// PlaceList возвращает список всех мест, определенных в хранилище для данной группы пользователей.
-func (db *DB) PlaceList(groupID string) (places []*Place, err error) {
+// List возвращает список всех мест, определенных в хранилище для данной группы пользователей.
+func (db *DBPlaces) List(groupID string) (places []*Place, err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionPlaces)
 	places = make([]*Place, 0)
@@ -83,9 +83,9 @@ func (db *DB) PlaceList(groupID string) (places []*Place, err error) {
 	return
 }
 
-// PlaceCreate добавляет в хранилище описание нового места для группы. Указание группы позволяет
+// Create добавляет в хранилище описание нового места для группы. Указание группы позволяет
 // дополнительно защитить от ошибок переназначения места для другой группы.
-func (db *DB) PlaceCreate(groupId string, place *Place) (err error) {
+func (db *DBPlaces) Create(groupId string, place *Place) (err error) {
 	if err = place.prepare(); err != nil {
 		return
 	}
@@ -100,9 +100,9 @@ func (db *DB) PlaceCreate(groupId string, place *Place) (err error) {
 	return
 }
 
-// PlaceUpdate обновляет информацию о месте в хранилище. Указание группы позволяет
+// Update обновляет информацию о месте в хранилище. Указание группы позволяет
 // дополнительно защитить от ошибок переназначения места для другой группы.
-func (db *DB) PlaceUpdate(groupId string, place *Place) (err error) {
+func (db *DBPlaces) Update(groupId string, place *Place) (err error) {
 	if err = place.prepare(); err != nil {
 		return
 	}
@@ -114,9 +114,9 @@ func (db *DB) PlaceUpdate(groupId string, place *Place) (err error) {
 	return
 }
 
-// PlaceDelete удаляет описание места с указанным идентификатором из хранилища. Указание группы
+// Delete удаляет описание места с указанным идентификатором из хранилища. Указание группы
 // позволяет дополнительно защитить от ошибок доступа к чужой информации.
-func (db *DB) PlaceDelete(groupId, id string) (err error) {
+func (db *DBPlaces) Delete(groupId, id string) (err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionPlaces)
 	err = coll.Remove(bson.M{"_id": id, "groupId": groupId})
