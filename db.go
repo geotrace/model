@@ -8,18 +8,10 @@ import (
 
 var ErrBadObjectId = errors.New("bad object id")
 
-// Названия коллекций в хранилище.
-var (
-	CollectionUsers   = "users"
-	CollectionEvents  = "events"
-	CollectionPlaces  = "places"
-	CollectionDevices = "devices"
-)
-
 // DB описывает хранилище данных и работу с ним.
 type DB struct {
-	name    string       // название базы данных
 	session *mgo.Session // открытая сессия соединения с MongoDB
+	name    string       // название базы данных
 }
 
 // Специализированные объекты для доступа к разным типам данных в хранилище.
@@ -28,4 +20,12 @@ type (
 	DBDevices DB // для обращения к данным об устройствах
 	DBEvents  DB // для обращения к данным о событиях
 	DBPlaces  DB // для обращения к данным об описании мест
+)
+
+// Названия коллекций в хранилище.
+var (
+	CollectionUsers   = "users"
+	CollectionDevices = "devices"
+	CollectionEvents  = "events"
+	CollectionPlaces  = "places"
 )
