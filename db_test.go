@@ -18,6 +18,7 @@ func TestDBType(t *testing.T) {
 	defer session.Close()
 	db := &DB{session, mdi.Database}
 	users := (*DBUsers)(db)
+	_ = users
 	// users.List("groupID")
 	// pretty.Println(db)
 	// pretty.Println(users)
