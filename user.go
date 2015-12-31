@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/geotrace/uid"
+	"github.com/mdigger/uid2"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -45,7 +45,11 @@ func (db *DB) UserList(groupID string) (users []User, err error) {
 // в противном случае возвращается ошибка.
 func (db *DB) UserCreate(user *User) (err error) {
 	if user.Login == "" {
-		user.Login = uid.New()
+		id, err := uid.ID64()
+		if err != nil {
+			return err
+		}
+		user.Login = id
 	}
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionUsers)

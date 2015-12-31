@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/geotrace/geo"
-	"github.com/geotrace/uid"
+	"github.com/mdigger/uid2"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -90,7 +90,11 @@ func (db *DB) PlaceCreate(groupId string, place *Place) (err error) {
 		return
 	}
 	if place.ID == "" {
-		place.ID = uid.New()
+		id, err := uid.ID64()
+		if err != nil {
+			return err
+		}
+		place.ID = id
 	}
 	place.GroupID = groupId
 	session := db.session.Copy()
