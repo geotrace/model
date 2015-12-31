@@ -68,8 +68,13 @@ type Event struct {
 func (db *DBEvents) Get(groupId, deviceId, id string) (event *Event, err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionEvents)
+	if !bson.IsObjectIdHex(id) {
+		err = ErrBadObjectId
+		return
+	}
+	objID := bson.ObjectIdHex(id)
 	event = new(Event)
-	err = coll.Find(bson.M{"_id": id, "groupId": groupId, "deviceId": deviceId}).
+	err = coll.Find(bson.M{"_id": objID, "groupId": groupId, "deviceId": deviceId}).
 		Select(bson.M{"groupId": 0, "deviceId": 0}).One(event)
 	session.Close()
 	return
