@@ -14,6 +14,11 @@ type DB struct {
 	name    string       // название базы данных
 }
 
+// InitDB инициализирует описание соединения с хранилищем и возвращает его.
+func InitDB(session *mgo.Session, dbName string) *DB {
+	return &DB{session, dbName}
+}
+
 // Специализированные объекты для доступа к разным типам данных в хранилище.
 type (
 	DBUsers   DB // для обращения к данным о зарегистрированных пользователях
