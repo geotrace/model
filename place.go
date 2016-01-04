@@ -8,9 +8,8 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-var (
-	ErrBadPlaceData = errors.New("bad place data: cyrcle or polygon is require")
-)
+// ErrBadPlaceData возвращается, если ни полигон, ни окружность не заданы в описании места.
+var ErrBadPlaceData = errors.New("bad place data: cyrcle or polygon is require")
 
 // Place описывает географическое место, задаваемое для группы пользователей. Такое место может
 // быть описано либо в виде круга, задаваемого координатами центральной точки и радиусом в метрах,

@@ -51,6 +51,8 @@ type Event struct {
 	Location *geo.Point `bson:"location,omitempty" json:"location,omitempty"`
 	// погрешность координат в метрах
 	Accuracy float64 `bson:"accuracy,omitempty" json:"accuracy,omitempty"`
+	// уровень заряда устройства на тот момент
+	Power uint8 `bson:"power,omitempty" json:"power,omitempty"`
 
 	// иконка в виде эмодзи
 	Emoji rune `bson:"emoji,omitempty" json:"emoji,omitempty"`
@@ -58,9 +60,6 @@ type Event struct {
 	Comment string `bson:"comment,omitempty" json:"comment,omitempty"`
 	// дополнительная именованная информация
 	Data map[string]interface{} `bson:"data,omitempty,inline" json:"data,omitempty"`
-
-	// уровень заряда устройства на тот момент
-	Power uint8 `bson:"power,omitempty" json:"power,omitempty"`
 }
 
 // Get возвращает описание события с указанным идентификатором для конкретного устройства
