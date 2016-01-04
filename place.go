@@ -64,7 +64,7 @@ func (p *Place) prepare() (err error) {
 // Get возвращает описание места по его идентификатору. Кроме идентификатора места, который
 // является уникальным, необходимо так же указывать идентификатор группы — это позволяет
 // дополнительно ограничить даже случайный доступ пользователей к чужой информации.
-func (db *DBPlaces) Get(groupId, id string) (place *Place, err error) {
+func (db *Places) Get(groupId, id string) (place *Place, err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionPlaces)
 	place = new(Place)
@@ -74,7 +74,7 @@ func (db *DBPlaces) Get(groupId, id string) (place *Place, err error) {
 }
 
 // List возвращает список всех мест, определенных в хранилище для данной группы пользователей.
-func (db *DBPlaces) List(groupID string) (places []*Place, err error) {
+func (db *Places) List(groupID string) (places []*Place, err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionPlaces)
 	places = make([]*Place, 0)
@@ -85,7 +85,7 @@ func (db *DBPlaces) List(groupID string) (places []*Place, err error) {
 
 // Create добавляет в хранилище описание нового места для группы. Указание группы позволяет
 // дополнительно защитить от ошибок переназначения места для другой группы.
-func (db *DBPlaces) Create(groupId string, place *Place) (err error) {
+func (db *Places) Create(groupId string, place *Place) (err error) {
 	if err = place.prepare(); err != nil {
 		return
 	}
@@ -102,7 +102,7 @@ func (db *DBPlaces) Create(groupId string, place *Place) (err error) {
 
 // Update обновляет информацию о месте в хранилище. Указание группы позволяет
 // дополнительно защитить от ошибок переназначения места для другой группы.
-func (db *DBPlaces) Update(groupId string, place *Place) (err error) {
+func (db *Places) Update(groupId string, place *Place) (err error) {
 	if err = place.prepare(); err != nil {
 		return
 	}
@@ -116,7 +116,7 @@ func (db *DBPlaces) Update(groupId string, place *Place) (err error) {
 
 // Delete удаляет описание места с указанным идентификатором из хранилища. Указание группы
 // позволяет дополнительно защитить от ошибок доступа к чужой информации.
-func (db *DBPlaces) Delete(groupId, id string) (err error) {
+func (db *Places) Delete(groupId, id string) (err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionPlaces)
 	err = coll.Remove(bson.M{"_id": id, "groupId": groupId})

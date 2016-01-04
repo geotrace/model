@@ -32,8 +32,17 @@ type User struct {
 	Password Password `bson:"password" json:"-"`
 }
 
+// Login возвращает информацию о пользователе по его логину.
+func (db *Users) Login(userID string) (user *User, err error) {
+	session := db.session.Copy()
+	coll := session.DB(db.name).C(CollectionUsers)
+	err = coll.FindId(userID).One(&user)
+	session.Close()
+	return
+}
+
 // List возвращает список всех пользователей, зарегистрированных в указанной группе.
-func (db *DBUsers) List(groupID string) (users []User, err error) {
+func (db *Users) List(groupID string) (users []User, err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionUsers)
 	users = make([]User, 0)
@@ -44,7 +53,7 @@ func (db *DBUsers) List(groupID string) (users []User, err error) {
 
 // Create создает нового пользователя по его описанию. Поле Login должно быть уникальным,
 // в противном случае возвращается ошибка.
-func (db *DBUsers) Create(user *User) (err error) {
+func (db *Users) Create(user *User) (err error) {
 	if user.Login == "" {
 		user.Login = uid.New()
 	}
@@ -56,7 +65,7 @@ func (db *DBUsers) Create(user *User) (err error) {
 }
 
 // Update обновляет информацию о пользователе в хранилище.
-func (db *DBUsers) Update(user User) (err error) {
+func (db *Users) Update(user User) (err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionUsers)
 	err = coll.UpdateId(user.Login, user)
@@ -65,7 +74,7 @@ func (db *DBUsers) Update(user User) (err error) {
 }
 
 // Delete удаляет пользователя с указанным логином из хранилища.
-func (db *DBUsers) Delete(login string) (err error) {
+func (db *Users) Delete(login string) (err error) {
 	session := db.session.Copy()
 	coll := session.DB(db.name).C(CollectionUsers)
 	err = coll.RemoveId(login)
