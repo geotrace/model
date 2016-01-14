@@ -17,5 +17,5 @@ func NewPassword(password string) Password {
 // Compare сравнивает сохраненный в виде хеш пароль с указанным в параметре и возвращает true,
 // если указанный пароль с очень большой степенью вероятности и является оригинальным паролем.
 func (p Password) Compare(password string) bool {
-	return bcrypt.CompareHashAndPassword(p, []byte(password)) != nil
+	return bcrypt.CompareHashAndPassword(p, []byte(password)) == nil
 }
