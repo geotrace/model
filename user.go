@@ -25,7 +25,7 @@ import (
 // adaptive hashing algorithm).
 type User struct {
 	// логин пользователя
-	Login string `bson:"_id" json:"login"`
+	Login string `bson:"_id" json:"id"`
 	// уникальный идентификатор группы
 	GroupID string `bson:"groupId,omitempty" json:"groupId,omitempty"`
 	// отображаемое имя
