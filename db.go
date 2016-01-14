@@ -6,7 +6,10 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-var ErrBadObjectId = errors.New("bad object id")
+var (
+	ErrBadObjectId = errors.New("bad object id")
+	ErrNotFound    = mgo.ErrNotFound
+)
 
 // DB описывает хранилище данных и работу с ним.
 type DB struct {
