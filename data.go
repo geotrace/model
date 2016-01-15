@@ -161,7 +161,7 @@ type Place struct {
 
 // ErrBadPlaceData возвращается, если ни полигон, ни окружность не заданы в
 // описании места.
-var ErrBadPlaceData = errors.New("cyrcle or polygon is require in place")
+var ErrBadPlaceData = errors.New("circle or polygon is require in place")
 
 // String возвращает строку с отображаемым именем описания места. Если для
 // данного места задано имя, то возвращается именно оно. В противном случае
