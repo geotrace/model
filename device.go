@@ -5,6 +5,8 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+type Devices DB // для обращения к данным об устройствах
+
 // Login возвращает авторизационную информацию об устройстве
 func (db *Devices) Login(id string) (device *Device, err error) {
 	session := db.session.Copy()

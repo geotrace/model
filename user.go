@@ -5,6 +5,8 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+type Users DB // для обращения к данным о зарегистрированных пользователях
+
 // Login возвращает информацию о пользователе по его логину.
 func (db *Users) Login(userID string) (user *User, err error) {
 	session := db.session.Copy()

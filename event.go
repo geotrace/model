@@ -2,6 +2,8 @@ package model
 
 import "gopkg.in/mgo.v2/bson"
 
+type Events DB // для обращения к данным о событиях
+
 // Get возвращает описание события с указанным идентификатором для конкретного
 // устройства из хранилища.
 func (db *Events) Get(groupId, deviceId, id string) (event *Event, err error) {

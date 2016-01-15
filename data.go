@@ -1,3 +1,4 @@
+//+build generate
 package model
 
 //go:generate codecgen -u=true -o=codec.go data.go
