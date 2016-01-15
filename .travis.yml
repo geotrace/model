@@ -5,6 +5,7 @@ go:
 services:
 - mongodb
 install:
+- go get -u github.com/ugorji/go/codec/codecgen
 - go get golang.org/x/tools/cmd/cover
 - go get github.com/mattn/goveralls
 - go get -t -v ./...
