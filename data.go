@@ -1,6 +1,9 @@
 package model
 
+//go:generate codecgen -u=true -o=codec.go data.go
+
 import (
+	"errors"
 	"time"
 
 	"github.com/geotrace/geo"
@@ -58,6 +61,16 @@ type Device struct {
 	Type string `bson:"type,omitempty" json:"type,omitempty" codec:"type,omitempty"`
 	// хеш пароля для авторизации
 	Password Password `bson:"password,omitempty" json:"-" codec:"-"`
+}
+
+// String возвращает строку с отображаемым именем устройства. Если для данного
+// устройства определено имя, то возвращается именно оно. В противном случае
+// возвращается уникальный идентификатор устройства.
+func (d *Device) String() string {
+	if d.Name != "" {
+		return d.Name
+	}
+	return d.ID
 }
 
 // Event обычно описывает место, время и событие, которое в нем случилось.
@@ -143,4 +156,34 @@ type Place struct {
 	Polygon *geo.Polygon `bson:"polygon,omitempty" json:"polygon,omitempty"`
 	// описание в формате GeoJSON для поиска
 	Geo interface{} `bson:"geo" json:"-"`
+}
+
+// ErrBadPlaceData возвращается, если ни полигон, ни окружность не заданы в
+// описании места.
+var ErrBadPlaceData = errors.New("cyrcle or polygon is require in place")
+
+// String возвращает строку с отображаемым именем описания места. Если для
+// данного места задано имя, то возвращается именно оно. В противном случае
+// возвращается его уникальный идентификатор.
+func (p *Place) String() string {
+	if p.Name != "" {
+		return p.Name
+	}
+	return p.ID
+}
+
+// prepare осуществляет предварительную подготовку данных, создавая специальный
+// объект для индекса.
+func (p *Place) prepare() (err error) {
+	// анализируем описание места и формируем данные для индексации
+	if p.Circle != nil {
+		p.Polygon = nil
+		p.Geo = p.Circle.Geo()
+	} else if p.Polygon != nil {
+		p.Circle = nil
+		p.Geo = p.Polygon.Geo()
+	} else {
+		err = ErrBadPlaceData
+	}
+	return
 }
