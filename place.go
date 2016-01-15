@@ -1,41 +1,9 @@
 package model
 
 import (
-	"errors"
-
 	"github.com/geotrace/uid"
 	"gopkg.in/mgo.v2/bson"
 )
-
-// ErrBadPlaceData возвращается, если ни полигон, ни окружность не заданы в
-// описании места.
-var ErrBadPlaceData = errors.New("cyrcle or polygon is require in place")
-
-// String возвращает строку с отображаемым именем описания места. Если для
-// данного места задано имя, то возвращается именно оно. В противном случае
-// возвращается его уникальный идентификатор.
-func (p *Place) String() string {
-	if p.Name != "" {
-		return p.Name
-	}
-	return p.ID
-}
-
-// prepare осуществляет предварительную подготовку данных, создавая специальный
-// объект для индекса.
-func (p *Place) prepare() (err error) {
-	// анализируем описание места и формируем данные для индексации
-	if p.Circle != nil {
-		p.Polygon = nil
-		p.Geo = p.Circle.Geo()
-	} else if p.Polygon != nil {
-		p.Circle = nil
-		p.Geo = p.Polygon.Geo()
-	} else {
-		err = ErrBadPlaceData
-	}
-	return
-}
 
 // Get возвращает описание места по его идентификатору. Кроме идентификатора
 // места, который является уникальным, необходимо так же указывать идентификатор

@@ -5,16 +5,6 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-// String возвращает строку с отображаемым именем устройства. Если для данного
-// устройства определено имя, то возвращается именно оно. В противном случае
-// возвращается уникальный идентификатор устройства.
-func (d *Device) String() string {
-	if d.Name != "" {
-		return d.Name
-	}
-	return d.ID
-}
-
 // Login возвращает авторизационную информацию об устройстве
 func (db *Devices) Login(id string) (device *Device, err error) {
 	session := db.session.Copy()
