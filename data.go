@@ -31,13 +31,13 @@ import (
 // adaptive hashing algorithm).
 type User struct {
 	// логин пользователя
-	Login string `bson:"_id" json:"id" codec:"id"`
+	Login string `bson:"_id" json:"id"`
 	// уникальный идентификатор группы
-	GroupID string `bson:"groupId,omitempty" json:"groupId,omitempty" codec:"groupId,omitempty"`
+	GroupID string `bson:"groupId,omitempty" json:"groupId,omitempty"`
 	// отображаемое имя
-	Name string `bson:"name,omitempty" json:"name,omitempty" codec:"name,omitempty"`
+	Name string `bson:"name,omitempty" json:"name,omitempty"`
 	// хеш пароля пользователя
-	Password Password `bson:"password" json:"-" codec:"-"`
+	Password Password `bson:"password" json:"-"`
 }
 
 // Device описывает информацию об устройстве.
@@ -53,15 +53,15 @@ type User struct {
 // команд.
 type Device struct {
 	// глобальный уникальный идентификатор устройства
-	ID string `bson:"_id" json:"id" codec:"id"`
+	ID string `bson:"_id" json:"id"`
 	// уникальный идентификатор группы
-	GroupID string `bson:"groupId,omitempty" json:"groupId,omitempty" codec:"groupId,omitempty"`
+	GroupID string `bson:"groupId,omitempty" json:"groupId,omitempty"`
 	// отображаемое имя
-	Name string `bson:"name,omitempty" json:"name,omitempty" codec:"name,omitempty"`
+	Name string `bson:"name,omitempty" json:"name,omitempty"`
 	// идентификатор типа устройства
-	Type string `bson:"type,omitempty" json:"type,omitempty" codec:"type,omitempty"`
+	Type string `bson:"type,omitempty" json:"type,omitempty"`
 	// хеш пароля для авторизации
-	Password Password `bson:"password,omitempty" json:"-" codec:"-"`
+	Password Password `bson:"password,omitempty" json:"-"`
 }
 
 // String возвращает строку с отображаемым именем устройства. Если для данного
@@ -107,29 +107,29 @@ func (d *Device) String() string {
 // формате. Главное, чтобы приложение знало, что потом с этим делать.
 type Event struct {
 	// уникальный идентификатор записи
-	ID bson.ObjectId `bson:"_id" json:"id" codec:"id"`
+	ID bson.ObjectId `bson:"_id" json:"id"`
 	// уникальный идентификатор устройства
-	DeviceID string `bson:"deviceId" json:"deviceId" codec:"deviceId"`
+	DeviceID string `bson:"deviceId" json:"deviceId"`
 	// уникальный идентификатор группы
-	GroupID string `bson:"groupId,omitempty" json:"groupId,omitempty" codec:"groupId,omitempty"`
+	GroupID string `bson:"groupId,omitempty" json:"groupId,omitempty"`
 
 	// временная метка
-	Time time.Time `bson:"time" json:"time" codec:"time"`
+	Time time.Time `bson:"time" json:"time"`
 	// тип события: Arrive, Leave, Travel, Check-in, Happen
-	Type string `bson:"type,omitempty" json:"type,omitempty" codec:"type,omitempty"`
+	Type string `bson:"type,omitempty" json:"type,omitempty"`
 	// координаты точки
-	Location *geo.Point `bson:"location,omitempty" json:"location,omitempty" codec:"location,omitempty"`
+	Location *geo.Point `bson:"location,omitempty" json:"location,omitempty"`
 	// погрешность координат в метрах
-	Accuracy float64 `bson:"accuracy,omitempty" json:"accuracy,omitempty" codec:"accuracy,omitempty"`
+	Accuracy float64 `bson:"accuracy,omitempty" json:"accuracy,omitempty"`
 	// уровень заряда устройства на тот момент
-	Power uint8 `bson:"power,omitempty" json:"power,omitempty" codec:"power,omitempty"`
+	Power uint8 `bson:"power,omitempty" json:"power,omitempty"`
 
 	// иконка в виде эмодзи
-	Emoji rune `bson:"emoji,omitempty" json:"emoji,omitempty" codec:"emoji,omitempty"`
+	Emoji rune `bson:"emoji,omitempty" json:"emoji,omitempty"`
 	// текстовый комментарий к событию
-	Comment string `bson:"comment,omitempty" json:"comment,omitempty" codec:"comment,omitempty"`
+	Comment string `bson:"comment,omitempty" json:"comment,omitempty"`
 	// дополнительная именованная информация
-	Data map[string]interface{} `bson:"data,omitempty,inline" json:"data,omitempty" json:"codec,omitempty"`
+	Data map[string]interface{} `bson:"data,omitempty,inline" json:"data,omitempty"`
 }
 
 // Place описывает географическое место, задаваемое для группы пользователей.

@@ -74,4 +74,30 @@ func TestData(t *testing.T) {
 		t.Error(err)
 	}
 	pretty.Println(place)
+
+	// enc = codec.NewEncoder(os.Stdout, new(codec.CborHandle))
+	// err = enc.Encode([]*Place{
+	// 	{
+	// 		ID:      "id",
+	// 		GroupID: "group_id",
+	// 		Name:    "name",
+	// 		Circle:  &circle,
+	// 	},
+	// 	{
+	// 		ID:      "id",
+	// 		GroupID: "group_id",
+	// 		Name:    "name",
+	// 		Circle:  &circle,
+	// 	},
+	// 	{
+	// 		ID:      "id",
+	// 		GroupID: "group_id",
+	// 		Name:    "name",
+	// 		Circle:  &circle,
+	// 	},
+	// })
+	// if err != nil {
+	// 	t.Error(err)
+	// }
+
 }
