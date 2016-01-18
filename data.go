@@ -121,6 +121,8 @@ type Event struct {
 	Location *geo.Point `bson:"location,omitempty" json:"location,omitempty"`
 	// погрешность координат в метрах
 	Accuracy float64 `bson:"accuracy,omitempty" json:"accuracy,omitempty"`
+	// идентификатор места
+	PlaceID string `bson:"placeId,omitempty" json:"placeId,omitempty"`
 	// уровень заряда устройства на тот момент
 	Power uint8 `bson:"power,omitempty" json:"power,omitempty"`
 
