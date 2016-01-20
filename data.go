@@ -33,7 +33,7 @@ type User struct {
 	// логин пользователя
 	Login string `bson:"_id" json:"id"`
 	// уникальный идентификатор группы
-	GroupID string `bson:"groupId,omitempty" json:"groupId,omitempty"`
+	GroupID string `bson:"group,omitempty" json:"group,omitempty"`
 	// отображаемое имя
 	Name string `bson:"name,omitempty" json:"name,omitempty"`
 	// хеш пароля пользователя
@@ -55,7 +55,7 @@ type Device struct {
 	// глобальный уникальный идентификатор устройства
 	ID string `bson:"_id" json:"id"`
 	// уникальный идентификатор группы
-	GroupID string `bson:"groupId,omitempty" json:"groupId,omitempty"`
+	GroupID string `bson:"group,omitempty" json:"group,omitempty"`
 	// отображаемое имя
 	Name string `bson:"name,omitempty" json:"name,omitempty"`
 	// идентификатор типа устройства
@@ -109,9 +109,9 @@ type Event struct {
 	// уникальный идентификатор записи
 	ID bson.ObjectId `bson:"_id" json:"id"`
 	// уникальный идентификатор устройства
-	DeviceID string `bson:"deviceId" json:"deviceId"`
+	DeviceID string `bson:"device" json:"device"`
 	// уникальный идентификатор группы
-	GroupID string `bson:"groupId,omitempty" json:"groupId,omitempty"`
+	GroupID string `bson:"group,omitempty" json:"group,omitempty"`
 
 	// временная метка
 	Time time.Time `bson:"time" json:"time"`
@@ -122,7 +122,7 @@ type Event struct {
 	// погрешность координат в метрах
 	Accuracy float64 `bson:"accuracy,omitempty" json:"accuracy,omitempty"`
 	// идентификатор места
-	PlaceID string `bson:"placeId,omitempty" json:"placeId,omitempty"`
+	PlaceID string `bson:"place,omitempty" json:"place,omitempty"`
 	// уровень заряда устройства на тот момент
 	Power uint8 `bson:"power,omitempty" json:"power,omitempty"`
 
@@ -150,7 +150,7 @@ type Place struct {
 	// уникальный идентификатор описания места
 	ID string `bson:"_id,omitempty" json:"id"`
 	// уникальный идентификатор группы
-	GroupID string `bson:"groupId,omitempty" json:"groupId,omitempty"`
+	GroupID string `bson:"group,omitempty" json:"group,omitempty"`
 	// отображаемое имя
 	Name string `bson:"name,omitempty" json:"name,omitempty"`
 	// географическое описание места как круга
